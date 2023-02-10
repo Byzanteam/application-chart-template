@@ -1,0 +1,63 @@
+{{- if .Values.appIngressroute | empty | not }}
+{{/* Middlewares for web ingress-routes */}}
+{{- $webMiddlewares := list }}
+{{- $webMiddlewares = append $webMiddlewares "compress" }}
+{{- $webMiddlewares = append $webMiddlewares "stripprefix" }}
+{{- if .Values.applicationTLSSecret | empty | not }}
+{{- $webMiddlewares = append $webMiddlewares "redirect-to-https" }}
+{{- end }}
+
+{{/* Middlewares for websecure ingress-routes */}}
+{{- $websecureMiddlewares := list }}
+{{- $websecureMiddlewares = append $websecureMiddlewares "compress" }}
+{{- $websecureMiddlewares = append $websecureMiddlewares "stripprefix" }}
+{{- $websecureMiddlewares = append $websecureMiddlewares "server-headers" }}
+
+{{- $hosts := .Values.applicationHost }}
+{{- $lastIndex := sub (len $hosts) 1 }}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "application-chart-template.fullname" $ }}-web
+spec:
+  entryPoints:
+    - web
+  routes:
+  {{- range .Values.appIngressroute }}
+    # - match: ({{ range $.Values.applicationHost }} HOST(`{{ . }}`) {{- end }}) && PathPrefix(`/{{ .path }}`)
+    - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ $.Values.service.port }}
+      middlewares:
+        {{- range $webMiddlewares }}
+        - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
+        {{- end}}
+  {{- end }}
+---
+{{- if .Values.applicationTLSSecret | empty | not }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "application-chart-template.fullname" $ }}-websecure
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  {{- range .Values.appIngressroute }}
+    - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ $.Values.service.port }}
+      middlewares:
+        {{- range $websecureMiddlewares }}
+        - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
+        {{- end}}
+  tls:
+    secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
+  {{- end }}
+{{- end }}
+{{- end }}
