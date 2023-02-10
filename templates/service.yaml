@@ -14,8 +14,8 @@ spec:
   selector:
     {{- include "application-chart-template.selectorLabels" $ | nindent 4 }}
 ---
-{{- if .Values.externalEndPoint | empty | not }}
-{{- range .Values.externalEndPoint }}
+{{- if .Values.externalServices | empty | not }}
+{{- range .Values.externalServices }}
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -32,8 +32,8 @@ subsets:
 {{- end }}
 {{- end }}
 ---
-{{- if .Values.externalService | empty | not }}
-{{- range .Values.externalService }}
+{{- if .Values.externalServices | empty | not }}
+{{- range .Values.externalServices }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -44,7 +44,7 @@ spec:
   ports:
     - protocol: TCP
       port: {{ .port }}
-      targetPort: {{ .targetPort }}
+      targetPort: {{ .port }}
   selector:
     {{- include "application-chart-template.selectorLabels" $ | nindent 4 }}
 {{- end }}
