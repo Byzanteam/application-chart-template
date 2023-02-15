@@ -25,7 +25,6 @@ spec:
     - web
   routes:
   {{- range .Values.appIngressroute }}
-    # - match: ({{ range $.Values.applicationHost }} HOST(`{{ . }}`) {{- end }}) && PathPrefix(`/{{ .path }}`)
     - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
