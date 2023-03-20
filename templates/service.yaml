@@ -13,39 +13,3 @@ spec:
       name: {{ .Values.service.name }}
   selector:
     {{- include "application-chart-template.selectorLabels" $ | nindent 4 }}
----
-{{- if .Values.externalServices | empty | not }}
-{{- range .Values.externalServices }}
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}
-  labels:
-    {{- include "application-chart-template.labels" $ | nindent 4 }}
-subsets:
-- addresses:
-  - ip: {{ .ip }}
-  ports:
-  - name: {{ .name }}
-    port: {{ .port }}
-    protocol: TCP
-{{- end }}
-{{- end }}
----
-{{- if .Values.externalServices | empty | not }}
-{{- range .Values.externalServices }}
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}
-  labels:
-    {{- include "application-chart-template.labels" $ | nindent 4 }}
-spec:
-  ports:
-    - protocol: TCP
-      port: {{ .port }}
-      targetPort: {{ .port }}
-  selector:
-    {{- include "application-chart-template.selectorLabels" $ | nindent 4 }}
-{{- end }}
-{{- end }}
