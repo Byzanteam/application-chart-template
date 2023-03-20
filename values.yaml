@@ -2,11 +2,13 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-########################Pod Setting########################
+########################Cluster Setting########################
 
 # 使用前请修改 fullnameOverride 和 nameOverride，方便分辨与查找此应用
 nameOverride: ""
 fullnameOverride: ""
+
+nodeSelector: {}
 
 # 设置 chart 的 namespace
 namespace: default
@@ -24,11 +26,6 @@ imageCredentials: {}
   # username: deploy-man@skylark
   # password: changeit
   # email: dev@byzan.team
-
-service:
-  name: http
-  type: ClusterIP
-  port: 80
 
 # 使用 Pods 资源限制请配置 resourcees。
 resources: {}
@@ -51,34 +48,47 @@ autoscaling:
 # 自动重启策略
 restartPolicy: Always
 
-nodeSelector: {}
+########################Service Setting########################
+# 应用服务配置
+service:
+  name: http
+  type: ClusterIP
+  port: 80
 
-# 设置外部服务引入
-externalServices: []
-  # - name: ""
-  #   ip: ""
-  #   port: ""
-
-# 此处外部服务代理复杂度过高先，先保留字段
-# traefik 代理外部服务的匹配规则
-externalIngressroute: []
-  # - name: ""
-  #   path: ""
-  #   middlewares: {'compress', 'stripprefix', 'cros-header'}
-  #   host: ""
-
-########################Application Setting########################
-
-# Application 代理设置
+# Application 访问域名设置
 applicationHost: []
   # - localhost
-applicationTLSSecret:
+
+applicationTLSSecret: {}
+  # certificate: base64 encoding certificate-file
+  # key: base64 encoding key-file
 
 # traefik 代理应用的匹配规则
 appIngressroute: []
   # - name: web
   #   path: /
     
+# traefik 代理外部服务的匹配规则
+externalIngressroute: []
+#   - name: "firt-server"
+#     host: "test.cn"
+#     port: "80"
+#     path: "/first"
+#     middlewares:
+#       - compress
+#       - strip-prefix
+#       - cors-header
+#   - name: "second-server"
+#     ip: "127.0.0.1"
+#     port: "443"
+#     path: "/second"
+#     middlewares:
+#       - strip-prefix
+#       - cros-header
+#       - redirect-to-https
+#       - cors-header
+
+########################Application Setting########################
 
 # 需要使用 initcontainers 请配置此项
 initContainers: []
