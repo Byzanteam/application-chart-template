@@ -1,0 +1,51 @@
+{{- range $_, $service := .Values.externalIngressroute }}
+
+{{- $hosts := $.Values.applicationHost }}
+{{- $lastIndex := sub (len $hosts) 1 }}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
+          port: {{ $service.port }}
+      middlewares:
+        {{- range .middlewares }}
+        - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-{{ . }}
+        {{- end}}
+{{- end }}
+---
+{{- range $_, $service := .Values.externalIngressroute }}
+{{- if has "redirect-to-https" $service.middlewares }}
+
+{{- $hosts := $.Values.applicationHost }}
+{{- $lastIndex := sub (len $hosts) 1 }}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
+          port: {{ $service.port }}
+      middlewares:
+        {{- range without $service.middlewares "redirect-to-https" }}
+        - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-{{ . }}
+        {{- end}}
+  tls:
+    secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
+{{- end }}
+{{- end }}
