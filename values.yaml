@@ -88,7 +88,7 @@ volumeMounts: []
 
 volumes: []
   # - name: volumeName
-  #   hostPath: 
+  #   hostPath:
   #     path: /local/path
   #     type: DirectoryOrCreate
 

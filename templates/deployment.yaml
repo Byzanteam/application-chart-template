@@ -35,7 +35,7 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
           volumeMounts:
-            {{- .Values.volumeMounts | toYaml | nindent 12}}
+            {{- .Values.volumeMounts | toYaml | nindent 12 }}
       restartPolicy: {{ .Values.restartPolicy }}
       volumes:
-        {{- .Values.volumes | toYaml | nindent 8}}
+        {{- .Values.volumes | toYaml | nindent 8 }}

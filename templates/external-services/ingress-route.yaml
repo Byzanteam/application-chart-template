@@ -19,7 +19,7 @@ spec:
       middlewares:
         {{- range .middlewares }}
         - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-{{ . }}
-        {{- end}}
+        {{- end }}
 {{- end }}
 ---
 {{- range $_, $service := .Values.externalIngressroute }}
@@ -44,7 +44,7 @@ spec:
       middlewares:
         {{- range without $service.middlewares "redirect-to-https" }}
         - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-{{ . }}
-        {{- end}}
+        {{- end }}
   tls:
     secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
 {{- end }}

@@ -33,7 +33,7 @@ spec:
       middlewares:
         {{- range $webMiddlewares }}
         - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
-        {{- end}}
+        {{- end }}
   {{- end }}
 ---
 {{- if .Values.applicationTLSSecret | empty | not }}
@@ -54,7 +54,7 @@ spec:
       middlewares:
         {{- range $websecureMiddlewares }}
         - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
-        {{- end}}
+        {{- end }}
   tls:
     secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
   {{- end }}

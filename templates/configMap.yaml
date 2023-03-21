@@ -5,4 +5,4 @@ metadata:
     {{- include "application-chart-template.labels" . | nindent 4 }}
   name: {{ include "application-chart-template.name" . }}-env
 data:
-  {{- .Values.env | toYaml | nindent 2}}
+  {{- .Values.env | toYaml | nindent 2 }}

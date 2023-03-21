@@ -49,5 +49,3 @@ spec:
     {{- include "application-chart-template.selectorLabels" $ | nindent 4 }}
 {{- end }}
 {{- end }}
-
-
