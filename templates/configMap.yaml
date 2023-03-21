@@ -1,10 +1,8 @@
-{{- if .Values.env | empty | not }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
   labels:
     {{- include "application-chart-template.labels" . | nindent 4 }}
-  name: {{ include "application-chart-template.name" $ }}-env
+  name: {{ include "application-chart-template.name" . }}-env
 data:
   {{- .Values.env | toYaml | nindent 2}}
-{{- end }}
