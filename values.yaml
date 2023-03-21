@@ -28,26 +28,8 @@ imageCredentials: {}
 # 自动重启策略
 restartPolicy: Always
 
-########################Service Setting########################
-# 应用服务配置
-service:
-  name: http
-  type: ClusterIP
-  port: 80
+########################External Service Setting########################
 
-# Application 访问域名设置
-applicationHost: []
-  # - localhost
-
-applicationTLSSecret: {}
-  # certificate: base64 encoding certificate-file
-  # key: base64 encoding key-file
-
-# traefik 代理应用的匹配规则
-appIngressroute: []
-  # - name: web
-  #   path: /
-    
 # traefik 代理外部服务的匹配规则
 externalIngressroute: []
 #   - name: "firt-server"
@@ -68,7 +50,26 @@ externalIngressroute: []
 #       - redirect-to-https
 #       - cors-header
 
-########################Application Setting########################
+########################Application Service Setting########################
+
+# 应用服务配置
+service:
+  name: http
+  type: ClusterIP
+  port: 80
+
+# Application 访问域名设置
+applicationHosts: []
+  # - localhost
+
+applicationTLSSecret: {}
+  # certificate: base64 encoding certificate-file
+  # key: base64 encoding key-file
+
+# traefik 代理应用的匹配规则
+appIngressroute: []
+  # - name: web
+  #   path: /
 
 # 需要使用 initcontainers 请配置此项
 initContainers: []
