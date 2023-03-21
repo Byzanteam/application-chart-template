@@ -8,8 +8,6 @@
 nameOverride: ""
 fullnameOverride: ""
 
-nodeSelector: {}
-
 # 设置 chart 的 namespace
 namespace: default
 
@@ -26,24 +24,6 @@ imageCredentials: {}
   # username: deploy-man@skylark
   # password: changeit
   # email: dev@byzan.team
-
-# 使用 Pods 资源限制请配置 resourcees。
-resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-# 若使用 hpa 自动扩缩容请确保已设置 resources 并且下方 enable 设置为 true。
-# 调整下方参数
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 5
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 # 自动重启策略
 restartPolicy: Always
