@@ -1,6 +1,5 @@
 {{- range $_, $service := .Values.externalIngressroute }}
 {{- if has "cors-header" $service.middlewares }}
-# Enable gzip compression
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:

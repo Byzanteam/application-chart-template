@@ -29,7 +29,7 @@ spec:
 {{- range .Values.appIngressroute }}
 
 {{/* Middlewares for websecure ingress-routes */}}
-{{- $websecureMiddlewares := list "compress" "stripprefix" }}
+{{- $websecureMiddlewares := list "compress" "strip-prefix" }}
 
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
