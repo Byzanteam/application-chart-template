@@ -28,7 +28,7 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "application-chart-template.name" . }}-env
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: {{ .Values.service.name }}

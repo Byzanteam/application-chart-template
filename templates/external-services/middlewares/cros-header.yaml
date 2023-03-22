@@ -7,6 +7,6 @@ metadata:
 spec:
   headers:
     customRequestHeaders:
-      Host: {{ $service.host | default $service.ip | quote }}
+      Host: {{ coalesce $service.host $service.ip }}
 {{- end }}
 {{- end }}
