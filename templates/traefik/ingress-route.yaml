@@ -1,27 +1,19 @@
-{{- if .Values.appIngressroute | empty | not }}
+{{- range .Values.appIngressroute }}
+
 {{/* Middlewares for web ingress-routes */}}
-{{- $webMiddlewares := list }}
-{{- $webMiddlewares = append $webMiddlewares "compress" }}
-{{- $webMiddlewares = append $webMiddlewares "stripprefix" }}
-{{- if .Values.applicationTLSSecret | empty | not }}
+{{- $webMiddlewares := list "compress" "strip-prefix" }}
+{{- if $.Values.applicationTLSSecret | empty | not }}
 {{- $webMiddlewares = append $webMiddlewares "redirect-to-https" }}
 {{- end }}
-
-{{/* Middlewares for websecure ingress-routes */}}
-{{- $websecureMiddlewares := list }}
-{{- $websecureMiddlewares = append $websecureMiddlewares "compress" }}
-{{- $websecureMiddlewares = append $websecureMiddlewares "stripprefix" }}
-{{- $websecureMiddlewares = append $websecureMiddlewares "server-headers" }}
 
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.fullname" . }}-web
+  name: {{ include "application-chart-template.fullname" $ }}-web
 spec:
   entryPoints:
     - web
   routes:
-  {{- range .Values.appIngressroute }}
     - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
@@ -31,18 +23,22 @@ spec:
         {{- range $webMiddlewares }}
         - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
         {{- end }}
-  {{- end }}
+{{- end }}
 ---
 {{- if .Values.applicationTLSSecret | empty | not }}
+{{- range .Values.appIngressroute }}
+
+{{/* Middlewares for websecure ingress-routes */}}
+{{- $websecureMiddlewares := list "compress" "stripprefix" }}
+
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.fullname" . }}-websecure
+  name: {{ include "application-chart-template.fullname" $ }}-websecure
 spec:
   entryPoints:
     - websecure
   routes:
-  {{- range .Values.appIngressroute }}
     - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
@@ -54,6 +50,5 @@ spec:
         {{- end }}
   tls:
     secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
-  {{- end }}
 {{- end }}
 {{- end }}
