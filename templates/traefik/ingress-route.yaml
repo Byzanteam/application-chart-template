@@ -16,7 +16,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.fullname" $ }}-web
+  name: {{ include "application-chart-template.fullname" . }}-web
 spec:
   entryPoints:
     - web
@@ -37,7 +37,7 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.fullname" $ }}-websecure
+  name: {{ include "application-chart-template.fullname" . }}-websecure
 spec:
   entryPoints:
     - websecure

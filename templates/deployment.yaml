@@ -24,10 +24,10 @@ spec:
         {{- .Values.initContainers | toYaml | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ include "application-chart-template.name" $ }}
+        - name: {{ include "application-chart-template.name" . }}
           envFrom:
             - configMapRef:
-                name: {{ include "application-chart-template.name" $ }}-env
+                name: {{ include "application-chart-template.name" . }}-env
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
