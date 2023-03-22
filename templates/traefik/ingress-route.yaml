@@ -13,9 +13,6 @@
 {{- $websecureMiddlewares = append $websecureMiddlewares "stripprefix" }}
 {{- $websecureMiddlewares = append $websecureMiddlewares "server-headers" }}
 
-{{- $hosts := .Values.applicationHost }}
-{{- $lastIndex := sub (len $hosts) 1 }}
-
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -25,7 +22,7 @@ spec:
     - web
   routes:
   {{- range .Values.appIngressroute }}
-    - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
@@ -46,7 +43,7 @@ spec:
     - websecure
   routes:
   {{- range .Values.appIngressroute }}
-    - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}

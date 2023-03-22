@@ -1,8 +1,5 @@
 {{- range $_, $service := .Values.externalIngressroute }}
 
-{{- $hosts := $.Values.applicationHost }}
-{{- $lastIndex := sub (len $hosts) 1 }}
-
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -11,7 +8,7 @@ spec:
   entryPoints:
     - web
   routes:
-    - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
@@ -25,9 +22,6 @@ spec:
 {{- range $_, $service := .Values.externalIngressroute }}
 {{- if has "redirect-to-https" $service.middlewares }}
 
-{{- $hosts := $.Values.applicationHost }}
-{{- $lastIndex := sub (len $hosts) 1 }}
-
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -36,7 +30,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: ({{- range $index, $host := $hosts -}}{{ if $host }} HOST(`{{ $host }}`){{ end }}{{ if ne $index $lastIndex }} ||{{ end }}{{- end -}}) && PathPrefix(`{{ .path }}`)
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}

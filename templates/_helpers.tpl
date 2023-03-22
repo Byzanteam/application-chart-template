@@ -59,3 +59,21 @@ app.kubernetes.io/name: {{ include "application-chart-template.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/namespace: {{ .Values.namespace }}
 {{- end }}
+
+{{/*
+Host for access rule
+*/}}
+{{- define "application-chart-template.applicationHosts" -}}
+{{- $hosts := .Values.applicationHosts }}
+{{- $lastIndex := sub (len $hosts) 1 }}
+{{- $ruleHosts := "" }}
+{{- range $index, $host := $hosts -}}
+  {{- if $host }}
+    {{- $ruleHosts = printf "%sHOST(`%s`)" $ruleHosts $host }}
+    {{- if ne $index $lastIndex }}
+      {{- $ruleHosts = printf "%s || " $ruleHosts }}
+    {{- end }}
+  {{- end }}
+{{- end -}}
+{{- printf "(%s)" $ruleHosts }}
+{{- end -}}
