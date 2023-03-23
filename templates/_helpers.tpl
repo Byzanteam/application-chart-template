@@ -36,6 +36,7 @@ Selector labels
 {{- define "application-chart-template.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "application-chart-template.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/namespace: {{ .Values.namespace }}
 {{- end }}
 
 {{/*
@@ -64,9 +65,10 @@ Host for access rule
 */}}
 {{- define "application-chart-template.applicationHosts" -}}
 {{- $hosts := .Values.applicationHosts }}
-{{- $ruleHosts := "" }}
-{{- range $index, $host := $hosts }}
-  {{- $ruleHosts = printf "%sHost(`%s`) || " $ruleHosts $host }}
+{{- $orOperator := " || " }}
+{{- $ruleHosts := list }}
+{{- range $_, $host := $hosts }}
+  {{- $ruleHosts = append $ruleHosts (printf "Host(`%s`)" $host) }}
 {{- end }}
-{{- printf "(%s)" (trimSuffix " || " $ruleHosts) }}
+{{- printf "(%s)" (join $orOperator $ruleHosts) }}
 {{- end }}
