@@ -14,12 +14,17 @@ spec:
         - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
           port: {{ $service.port }}
       middlewares:
-        {{- range .middlewares }}
+        {{- if $.Values.applicationTLSSecret | empty | not }}
+        {{- range $service.middlewares }}
         - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-{{ . }}
         {{- end }}
-{{- end }}
+        {{- else }}
+        {{- range without $service.middlewares "redirect-to-https" }}
+        - name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-{{ . }}
+        {{- end }}
+        {{- end }}
 ---
-{{- range $_, $service := .Values.externalIngressroute }}
+{{- if $.Values.applicationTLSSecret | empty | not }}
 {{- if has "redirect-to-https" $service.middlewares }}
 
 apiVersion: traefik.containo.us/v1alpha1
@@ -41,5 +46,6 @@ spec:
         {{- end }}
   tls:
     secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
+{{- end }}
 {{- end }}
 {{- end }}
