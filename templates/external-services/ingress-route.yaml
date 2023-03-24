@@ -1,9 +1,10 @@
 {{- range $_, $service := .Values.externalIngressroute }}
 
+---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
+  name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-web
 spec:
   entryPoints:
     - web
@@ -30,7 +31,7 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
+  name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-websecure
 spec:
   entryPoints:
     - websecure

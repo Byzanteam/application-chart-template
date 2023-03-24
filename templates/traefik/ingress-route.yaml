@@ -1,5 +1,5 @@
 {{- range .Values.appIngressroute }}
-
+---
 {{/* Middlewares for web ingress-routes */}}
 {{- $webMiddlewares := list "compress" "strip-prefix" }}
 {{- if $.Values.applicationTLSSecret | empty | not }}
@@ -9,7 +9,7 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.fullname" $ }}-web
+  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}-web
 spec:
   entryPoints:
     - web
@@ -23,10 +23,8 @@ spec:
         {{- range $webMiddlewares }}
         - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
         {{- end }}
-{{- end }}
 ---
-{{- if .Values.applicationTLSSecret | empty | not }}
-{{- range .Values.appIngressroute }}
+{{- if $.Values.applicationTLSSecret | empty | not }}
 
 {{/* Middlewares for websecure ingress-routes */}}
 {{- $websecureMiddlewares := list "compress" "strip-prefix" }}
@@ -34,7 +32,7 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.fullname" $ }}-websecure
+  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}-websecure
 spec:
   entryPoints:
     - websecure
