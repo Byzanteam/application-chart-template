@@ -29,8 +29,6 @@ spec:
     - protocol: TCP
       port: {{ $service.port }}
       targetPort: {{ $service.port }}
-  selector:
-    {{- include "application-chart-template.selectorLabels" $ | nindent 4 }}
 {{- end }}
 {{- end }}
 ---
@@ -45,7 +43,5 @@ metadata:
 spec:
   type: ExternalName
   externalName: {{ $service.host }}
-  selector:
-    {{- include "application-chart-template.selectorLabels" $ | nindent 4 }}
 {{- end }}
 {{- end }}
