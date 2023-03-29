@@ -1,0 +1,17 @@
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "application-chart-template.fullname" . }}-test-connection
+  labels:
+    {{- include "application-chart-template.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+    "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  containers:
+    - name: curl-application
+      image: curlimages/curl
+      command: ['/bin/sh', '-c']
+      args: ['curl -o /dev/null -s -w "%{http_code}\n" {{ include "application-chart-template.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
