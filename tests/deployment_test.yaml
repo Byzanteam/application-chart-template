@@ -1,0 +1,78 @@
+suite: test deployment
+templates:
+  - templates/deployment.yaml
+tests:
+  - it: should render deployment resource
+    asserts:
+      - isKind:
+          of: Deployment
+
+  - it: should set name and namespace label to nameOverride and namespace if no override is set
+    asserts:
+      - isSubset:
+          path: spec.selector
+          content:
+            matchLabels:
+              app.kubernetes.io/name: application-chart-template
+              app.kubernetes.io/instance: RELEASE-NAME
+              app.kubernetes.io/namespace: default
+
+  - it: should set name and namespace label to nameOverride and namespace if set
+    set:
+      nameOverride: unittest
+      namespace: unittest
+    asserts:
+      - isSubset:
+          path: spec.selector
+          content:
+            matchLabels:
+              app.kubernetes.io/name: unittest
+              app.kubernetes.io/instance: RELEASE-NAME
+              app.kubernetes.io/namespace: unittest
+
+  - it: should change image when image value is specified
+    values:
+      - ./values/test.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].image
+          value: registry.cn-hangzhou.aliyuncs.com/org/image:latest
+
+  - it: should set imagePullSecrets if given
+    values:
+      - ./values/test.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.imagePullSecrets[0].name
+          value: RELEASE-NAME-application-chart-template-docker-registry-secret
+
+  - it: should set initContainers if given
+    values:
+      - ./values/test.yaml
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers
+          content:
+            name: init
+            image: buxybox:latest
+            command: ["sh", "-c"]
+            args: ["pwd"]
+
+  - it: should not have data volumeMount by default
+    asserts:
+      - isNull:
+          path: spec.template.spec.containers[0].volumeMounts[0]
+
+  - it: should have data volumeMount if set
+    set:
+      volumeMounts:
+        - mountPath: /path/file
+          name: unittest
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].name
+          value: unittest
+      - equal:
+          path: spec.template.spec.containers[0].volumeMounts[0].mountPath
+          value: /path/file
+
