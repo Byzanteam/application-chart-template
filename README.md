@@ -95,7 +95,7 @@ env: {}
 ```
 ### 7. 应用需要使用 https 时设置
 ```yaml
-slpTLSSecret:
+applicationTLSSecret:
   certificate: certificate-file base64 encoding
   key: key-file base64 encoding
 ```
