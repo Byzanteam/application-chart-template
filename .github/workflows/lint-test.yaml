@@ -29,6 +29,9 @@ jobs:
           helm env
           helm plugin install https://github.com/quintush/helm-unittest.git --version 0.2.8
 
+      - name: run helm unittest
+        run: helm unittest --helm3 charts/application-chart-template
+
       - name: Run chart-testing (lint)
         run: ct lint --config .github/linters/ct.yaml
 

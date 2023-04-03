@@ -2,7 +2,7 @@ remote: origin
 target-branch: main
 chart-dirs:
   - charts/
-additional-commands:
-  - helm unittest -f tests/*.yaml {{ .Path }}
+# additional-commands:
+#   - helm unittest --helm3 -f tests/*.yaml {{ .Path }}
 namespace: default
 release-label: app.kubernetes.io/namespace
