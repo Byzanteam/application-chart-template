@@ -27,7 +27,7 @@ A Helm chart template for byzanteam application
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"nginx"` |  |
-| image.tag | string | `""` |  |
+| image.tag | string | `latest` |  |
 | imageCredentials | object | `{}` |  |
 | initContainers | list | `[]` |  |
 | nameOverride | string | `""` |  |
@@ -46,6 +46,10 @@ A Helm chart template for byzanteam application
 - jet
 - 前端应用
 - 后端依赖应用
+
+## Once Helm has been set up correctly, add the repo as follows:
+
+  `helm repo add Byzanteam https://Byzanteam.github.io/application-chart-template`
 
 ## 使用前请编写 release.values.yaml 文件
 
