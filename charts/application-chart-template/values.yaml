@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-########################Cluster Setting########################
+######################## Cluster Setting ########################
 
 # 使用前请修改 fullnameOverride 和 nameOverride，方便分辨与查找此应用
 nameOverride: ""
@@ -28,7 +28,7 @@ imageCredentials: {}
 # 自动重启策略
 restartPolicy: Always
 
-########################External Service Setting########################
+######################## External Service Setting ########################
 
 # traefik 代理外部服务的匹配规则
 externalIngressroute: []
@@ -50,7 +50,7 @@ externalIngressroute: []
 #       - redirect-to-https
 #       - cors-header
 
-########################Application Service Setting########################
+######################## Application Service Setting ########################
 
 # 应用服务配置
 service:
