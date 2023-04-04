@@ -1,6 +1,8 @@
 remote: origin
 target-branch: main
 chart-dirs:
-  - charts/
+  - .
+charts:
+  - .
 namespace: default
 release-label: app.kubernetes.io/namespace
