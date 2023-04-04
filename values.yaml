@@ -1,0 +1,96 @@
+# Default values for application-chart-template.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+######################## Cluster Setting ########################
+
+# 使用前请修改 fullnameOverride 和 nameOverride，方便分辨与查找此应用
+nameOverride: ""
+fullnameOverride: ""
+
+# 设置 chart 的 namespace
+namespace: default
+
+# 设置此 Pod 的副本数
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: latest
+
+imageCredentials: {}
+  # registry: registry.cn-hangzhou.aliyuncs.com
+  # username: deploy-man@skylark
+  # password: changeit
+  # email: dev@byzan.team
+
+# 自动重启策略
+restartPolicy: Always
+
+######################## External Service Setting ########################
+
+# traefik 代理外部服务的匹配规则
+externalIngressroute: []
+#   - name: "firt-server"
+#     host: "test.cn"
+#     port: "80"
+#     path: "/first"
+#     middlewares:
+#       - compress
+#       - strip-prefix
+#       - cors-header
+#   - name: "second-server"
+#     ip: "127.0.0.1"
+#     port: "443"
+#     path: "/second"
+#     middlewares:
+#       - strip-prefix
+#       - cros-header
+#       - redirect-to-https
+#       - cors-header
+
+######################## Application Service Setting ########################
+
+# 应用服务配置
+service:
+  name: http
+  type: ClusterIP
+  port: 80
+
+# Application 访问域名设置
+applicationHosts: []
+  # - localhost
+
+applicationTLSSecret: {}
+  # certificate: base64 encoding certificate-file
+  # key: base64 encoding key-file
+
+# traefik 代理应用的匹配规则
+appIngressroute: []
+  # - name: web
+  #   path: /
+
+# 需要使用 initcontainers 请配置此项
+initContainers: []
+  # - name: init
+  #   image: busybox:latest
+  #   command: ["sh", "-c"]
+  #   args: []
+  #   envFrom:
+  #      - configMapRef:
+  #          name: {{ include "application-chart-template.name" $ }}-env
+
+# 设置此应用持久化存储
+volumeMounts: []
+  # - mountPath: /path/file
+  #   name: volumeName
+
+volumes: []
+  # - name: volumeName
+  #   hostPath:
+  #     path: /local/path
+  #     type: DirectoryOrCreate
+
+# application environment variablea, 根据实际设置
+env: {}

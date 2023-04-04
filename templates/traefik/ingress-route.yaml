@@ -1,0 +1,52 @@
+{{- range .Values.appIngressroute }}
+---
+{{/* Middlewares for web ingress-routes */}}
+{{- $webMiddlewares := list "compress" "strip-prefix" }}
+{{- if $.Values.applicationTLSSecret | empty | not }}
+{{- $webMiddlewares = append $webMiddlewares "redirect-to-https" }}
+{{- end }}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}-web
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ $.Values.service.port }}
+      middlewares:
+        {{- range $webMiddlewares }}
+        - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
+        {{- end }}
+---
+{{- if $.Values.applicationTLSSecret | empty | not }}
+
+{{/* Middlewares for websecure ingress-routes */}}
+{{- $websecureMiddlewares := list "compress" "strip-prefix" }}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}-websecure
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ $.Values.service.port }}
+      middlewares:
+        {{- range $websecureMiddlewares }}
+        - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
+        {{- end }}
+  tls:
+    secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
+{{- end }}
+{{- end }}

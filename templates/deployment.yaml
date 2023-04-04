@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "application-chart-template.fullname" . }}
+  labels:
+    {{- include "application-chart-template.labels" . | nindent 4 }}
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "application-chart-template.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "application-chart-template.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if .Values.imageCredentials | empty | not }}
+      imagePullSecrets:
+        - name: {{ include "application-chart-template.fullname" . }}-docker-registry-secret
+      {{- end }}
+      {{- if .Values.initContainers | empty | not }}
+      initContainers:
+        {{- .Values.initContainers | toYaml | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "application-chart-template.name" . }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "application-chart-template.name" . }}-env
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: {{ .Values.service.name }}
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          volumeMounts:
+            {{- .Values.volumeMounts | toYaml | nindent 12 }}
+      restartPolicy: {{ .Values.restartPolicy }}
+      volumes:
+        {{- .Values.volumes | toYaml | nindent 8 }}

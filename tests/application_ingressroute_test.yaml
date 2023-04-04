@@ -1,0 +1,56 @@
+suite: test application ingressroute
+templates:
+  - templates/traefik/ingress-route.yaml
+tests:
+  - it: should render nothing if appIngress empty
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should render match rule right
+    values:
+      - ./values/test.yaml
+    asserts:
+      - equal:
+          path: spec.routes[0].match
+          value: (Host(`192.168.0.1`) || Host(`172.16.0.1`)) && PathPrefix(`/app`)
+        documentIndex: 1
+      - equal:
+          path: spec.routes[0].match
+          value: (Host(`192.168.0.1`) || Host(`172.16.0.1`)) && PathPrefix(`/imag`)
+        documentIndex: 2
+
+  - it: should render middleware
+    values:
+      - ./values/test.yaml
+    asserts:
+      - equal:
+          path: spec.routes[0].middlewares[0].name
+          value: RELEASE-NAME-application-chart-template-compress
+      - equal:
+          path: spec.routes[0].middlewares[1].name
+          value: RELEASE-NAME-application-chart-template-strip-prefix
+
+  - it: should render middleware if set applicationTLSSecret
+    values:
+      - ./values/test.yaml
+    asserts:
+      - equal:
+          path: spec.routes[0].middlewares[2].name
+          value: RELEASE-NAME-application-chart-template-redirect-to-https
+        documentIndex: 0
+
+  - it:  should render tls if set applicationTLSSecret
+    values:
+      - ./values/test.yaml
+    asserts:
+      - isSubset:
+          path: spec.tls
+          content:
+            secretName: RELEASE-NAME-application-chart-template-tls-secret
+        documentIndex: 1
+      - isSubset:
+          path: spec.tls
+          content:
+            secretName: RELEASE-NAME-application-chart-template-tls-secret
+        documentIndex: 3
