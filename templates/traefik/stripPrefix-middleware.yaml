@@ -3,6 +3,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: {{ include "application-chart-template.fullname" . }}-strip-prefix
+  namespace: {{ $.Values.namespace }}
 spec:
   stripPrefix:
     prefixes:

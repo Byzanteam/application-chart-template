@@ -5,6 +5,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-compress
+  namespace: {{ $.Values.namespace }}
 spec:
   compress: {}
 {{- end }}

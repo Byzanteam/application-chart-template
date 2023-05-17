@@ -4,5 +4,6 @@ metadata:
   labels:
     {{- include "application-chart-template.labels" . | nindent 4 }}
   name: {{ include "application-chart-template.name" . }}-env
+  namespace: {{ .Values.namespace }}
 data:
   {{- .Values.env | toYaml | nindent 2 }}
