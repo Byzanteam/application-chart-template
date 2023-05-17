@@ -36,3 +36,4 @@ tests:
           content:
             tls.crt: dGVzdC1jaGFydC1jZXJ0LWZpbGUK
             tls.key: dGVzdC1jaGFydC1rZXktZmlsZQo=
+

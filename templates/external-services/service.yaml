@@ -6,6 +6,7 @@ metadata:
   name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
   labels:
     {{- include "application-chart-template.labels" $ | nindent 4 }}
+  namespace: {{ $.Values.namespace }}
 subsets:
 - addresses:
   - ip: {{ $service.ip }}
@@ -24,6 +25,7 @@ metadata:
   name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
   labels:
     {{- include "application-chart-template.labels" $ | nindent 4 }}
+  namespace: {{ $.Values.namespace }}
 spec:
   ports:
     - protocol: TCP
@@ -40,6 +42,7 @@ metadata:
   name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}
   labels:
     {{- include "application-chart-template.labels" $ | nindent 4 }}
+  namespace: {{ $.Values.namespace }}
 spec:
   type: ExternalName
   externalName: {{ $service.host }}

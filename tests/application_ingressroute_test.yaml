@@ -31,7 +31,7 @@ tests:
           path: spec.routes[0].middlewares[1].name
           value: RELEASE-NAME-application-chart-template-strip-prefix
 
-  - it: should render middleware if set applicationTLSSecret
+  - it: should render middleware if set applicationTLS
     values:
       - ./values/test.yaml
     asserts:
@@ -40,7 +40,7 @@ tests:
           value: RELEASE-NAME-application-chart-template-redirect-to-https
         documentIndex: 0
 
-  - it:  should render tls if set applicationTLSSecret
+  - it:  should render tls secretName if set applicationTLS
     values:
       - ./values/test.yaml
     asserts:
@@ -53,4 +53,22 @@ tests:
           path: spec.tls
           content:
             secretName: RELEASE-NAME-application-chart-template-tls-secret
+        documentIndex: 3
+
+  - it:  should render tls certResolver if set applicationTLS
+    set:
+      applicationTLS:
+        certResolver: byzanteam
+    values:
+      - ./values/test.yaml
+    asserts:
+      - isSubset:
+          path: spec.tls
+          content:
+            certResolver: byzanteam
+        documentIndex: 1
+      - isSubset:
+          path: spec.tls
+          content:
+            certResolver: byzanteam
         documentIndex: 3

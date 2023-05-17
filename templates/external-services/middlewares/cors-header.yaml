@@ -4,6 +4,7 @@ apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: {{ include "application-chart-template.external-service-name" (dict "root" $ "service" $service ) }}-cors-header
+  namespace: {{ $.Values.namespace }}
 spec:
   headers:
     customRequestHeaders:

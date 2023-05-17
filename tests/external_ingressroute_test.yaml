@@ -54,7 +54,7 @@ tests:
         - name: tls-test
           middlewares:
             - redirect-to-https
-      applicationTLSSecret: []
+      applicationTLS: []
     asserts:
       - hasDocuments:
           count: 1
@@ -65,14 +65,15 @@ tests:
         - name: tls-test
           middlewares:
             - redirect-to-https
-      applicationTLSSecret:
-        certificate: dGVzdC1jaGFydC1jZXJ0LWZpbGUK
-        key: dGVzdC1jaGFydC1rZXktZmlsZQo=
+      applicationTLS:
+        TLSSecret:
+          certificate: dGVzdC1jaGFydC1jZXJ0LWZpbGUK
+          key: dGVzdC1jaGFydC1rZXktZmlsZQo=
     asserts:
       - hasDocuments:
           count: 2
 
-  - it:  should render tls if set applicationTLSSecret
+  - it:  should render tls secretName if set applicationTLS.TLSSecret
     values:
       - ./values/test.yaml
     asserts:
@@ -80,4 +81,17 @@ tests:
           path: spec.tls
           content:
             secretName: RELEASE-NAME-application-chart-template-tls-secret
+        documentIndex: 1
+
+  - it:  should render tls certResolver if set applicationTLS.certResolver
+    set:
+      applicationTLS:
+        certResolver: byzanteam
+    values:
+      - ./values/test.yaml
+    asserts:
+      - isSubset:
+          path: spec.tls
+          content:
+            certResolver: byzanteam
         documentIndex: 1
