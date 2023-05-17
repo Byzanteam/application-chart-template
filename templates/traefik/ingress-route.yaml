@@ -2,7 +2,7 @@
 ---
 {{/* Middlewares for web ingress-routes */}}
 {{- $webMiddlewares := list "compress" "strip-prefix" }}
-{{- if $.Values.applicationTLSSecret | empty | not }}
+{{- if $.Values.applicationTLS | empty | not }}
 {{- $webMiddlewares = append $webMiddlewares "redirect-to-https" }}
 {{- end }}
 
@@ -24,7 +24,7 @@ spec:
         - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
         {{- end }}
 ---
-{{- if $.Values.applicationTLSSecret | empty | not }}
+{{- if $.Values.applicationTLS | empty | not }}
 
 {{/* Middlewares for websecure ingress-routes */}}
 {{- $websecureMiddlewares := list "compress" "strip-prefix" }}
@@ -47,6 +47,10 @@ spec:
         - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
         {{- end }}
   tls:
+    {{- if $.Values.applicationTLS.certResolver | empty | not }}
+    certResolver: {{ $.Values.applicationTLS.certResolver }}
+    {{- else if $.Values.applicationTLS.TLSSecret | empty | not }}
     secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
+    {{- end }}
 {{- end }}
 {{- end }}

@@ -62,9 +62,13 @@ service:
 applicationHosts: []
   # - localhost
 
-applicationTLSSecret: {}
-  # certificate: base64 encoding certificate-file
-  # key: base64 encoding key-file
+applicationTLS: {}
+  # 证书挑战设置此项
+  # certResolver: jet
+  # 已有证书设置此项
+  # TLSSecret: {}
+    # certificate: base64 encoding certificate-file
+    # key: base64 encoding key-file
 
 # traefik 代理应用的匹配规则
 appIngressroute: []

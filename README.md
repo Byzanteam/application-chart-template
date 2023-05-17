@@ -1,7 +1,6 @@
 # Application-chart-template
-Helm Chart 通用部署模版
 
-![Version: 1.0.9](https://img.shields.io/badge/Version-1.0.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 1.0.10](https://img.shields.io/badge/Version-1.0.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 A Helm chart template for byzanteam application
 
@@ -21,13 +20,13 @@ A Helm chart template for byzanteam application
 |-----|------|---------|-------------|
 | appIngressroute | list | `[]` |  |
 | applicationHosts | list | `[]` |  |
-| applicationTLSSecret | object | `{}` |  |
+| applicationTLS | object | `{}` |  |
 | env | object | `{}` |  |
 | externalIngressroute | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
 | image.repository | string | `"nginx"` |  |
-| image.tag | string | `latest` |  |
+| image.tag | string | `"latest"` |  |
 | imageCredentials | object | `{}` |  |
 | initContainers | list | `[]` |  |
 | nameOverride | string | `""` |  |
@@ -98,10 +97,17 @@ externalIngressroute:
 env: {}
 ```
 ### 7. 应用需要使用 https 时设置
+> 使用证书挑战设置 `certResolver` 参数
 ```yaml
-applicationTLSSecret:
-  certificate: certificate-file base64 encoding
-  key: key-file base64 encoding
+applicationTLS:
+  certResolver: jet
+```
+> 使用自有证书设置 `TLSSecret`
+```yaml
+applicationTLS:
+  TLSSecret:
+    certificate: certificate-file base64 encoding
+    key: key-file base64 encoding
 ```
 
 ## Misc

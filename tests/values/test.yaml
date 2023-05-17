@@ -40,9 +40,10 @@ externalIngressroute:
       - cors-header
       - strip-prefix
 
-applicationTLSSecret:
-  certificate: dGVzdC1jaGFydC1jZXJ0LWZpbGUK
-  key: dGVzdC1jaGFydC1rZXktZmlsZQo=
+applicationTLS:
+  TLSSecret:
+    certificate: dGVzdC1jaGFydC1jZXJ0LWZpbGUK
+    key: dGVzdC1jaGFydC1rZXktZmlsZQo=
 
 initContainers:
   - name: init
