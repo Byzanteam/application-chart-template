@@ -5,6 +5,9 @@
 {{- if $.Values.applicationTLS | empty | not }}
 {{- $webMiddlewares = append $webMiddlewares "redirect-to-https" }}
 {{- end }}
+{{- if $.Values.corsSettings | empty | not }}
+{{- $webMiddlewares = append $webMiddlewares "cors" }}
+{{- end }}
 
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -29,6 +32,9 @@ spec:
 
 {{/* Middlewares for websecure ingress-routes */}}
 {{- $websecureMiddlewares := list "compress" "strip-prefix" }}
+{{- if $.Values.corsSettings | empty | not }}
+{{- $websecureMiddlewares = append $websecureMiddlewares "cors" }}
+{{- end }}
 
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute

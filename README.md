@@ -21,12 +21,7 @@ A Helm chart template for byzanteam application
 | appIngressroute | list | `[]` |  |
 | applicationHosts | list | `[]` |  |
 | applicationTLS | object | `{}` |  |
-| crossDomainSetting.headers[0] | string | `"*"` |  |
-| crossDomainSetting.maxAge | string | `"100"` |  |
-| crossDomainSetting.methods[0] | string | `"GET"` |  |
-| crossDomainSetting.methods[1] | string | `"OPTIONS"` |  |
-| crossDomainSetting.methods[2] | string | `"PUT"` |  |
-| crossDomainSetting.originList[0] | string | `"*"` |  |
+| corsSettings | object | `{}` |  |
 | env | object | `{}` |  |
 | externalIngressroute | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
@@ -135,15 +130,15 @@ volumes:
 ### 应用跨域设置
 
 ```yaml
-crossDomainSetting:
-  headers:
+corsSettings:
+  accessControlAllowHeaders:
     - '*'
-  methods:
+  accessControlAllowMethods:
     - GET
     - OPTIONS
     - PUT
-  originList:
+  accessControlAllowOriginList:
     - '*'
-  maxAge: "100"
+  accessControlMaxAge: "100"
 ```
 
