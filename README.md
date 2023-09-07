@@ -1,6 +1,6 @@
-# Application-chart-template
+# application-chart-template
 
-![Version: 1.0.10](https://img.shields.io/badge/Version-1.0.10-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 A Helm chart template for byzanteam application
 
@@ -8,7 +8,7 @@ A Helm chart template for byzanteam application
 
 | Name | Email | Url |
 | ---- | ------ | --- |
-| YangKe | <yangke@jet.work> |  |
+| YangKe | <yangke@jet.work> |  https://Byzanteam.github.io/helm-charts |
 
 ## Source Code
 
@@ -21,6 +21,12 @@ A Helm chart template for byzanteam application
 | appIngressroute | list | `[]` |  |
 | applicationHosts | list | `[]` |  |
 | applicationTLS | object | `{}` |  |
+| crossDomainSetting.headers[0] | string | `"*"` |  |
+| crossDomainSetting.maxAge | string | `"100"` |  |
+| crossDomainSetting.methods[0] | string | `"GET"` |  |
+| crossDomainSetting.methods[1] | string | `"OPTIONS"` |  |
+| crossDomainSetting.methods[2] | string | `"PUT"` |  |
+| crossDomainSetting.originList[0] | string | `"*"` |  |
 | env | object | `{}` |  |
 | externalIngressroute | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
@@ -41,15 +47,6 @@ A Helm chart template for byzanteam application
 
 ----------------------------------------------
 
-## 支持应用
-- jet
-- 前端应用
-- 后端依赖应用
-
-## Once Helm has been set up correctly, add the repo as follows:
-
-  `helm repo add Byzanteam https://Byzanteam.github.io/application-chart-template`
-
 ## 使用前请编写 release.values.yaml 文件
 
 ### 1. 设置拉取镜像 name 与 tag
@@ -66,19 +63,19 @@ imageCredentials:
   username: deploy-man@skylark
   password: changeit
 ```
-### 3. 前端应用设置 application hosts(支持域名和IP)
+### 3. 设置 application hosts(支持域名和IP)
 ```yaml
 applicationHosts:
   - example.com
   - 192.168.0.1
 ```
-### 4. 前端应用设置反向代理对应 path 规则
+### 4. 设置反向代理对应 path 规则
 ```yaml
 appIngressroute:
   - name: example-name
     path: /example-path
 ```
-### 5. 前端应用设置外部服务代理规则
+### 5. 设置外部服务代理规则
 ```yaml
 externalIngressroute:
   - name: "external-name"
@@ -134,3 +131,19 @@ volumes:
       path: /local/path
       type: DirectoryOrCreate
 ```
+
+### 应用跨域设置
+
+```yaml
+crossDomainSetting:
+  headers:
+    - '*'
+  methods:
+    - GET
+    - OPTIONS
+    - PUT
+  originList:
+    - '*'
+  maxAge: "100"
+```
+
