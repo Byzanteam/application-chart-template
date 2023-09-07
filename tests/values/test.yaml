@@ -20,6 +20,20 @@ appIngressroute:
   - name: image
     path: /imag
 
+corsSettings:
+  accessControlAllowHeaders:
+    - 'Date'
+    - 'Etag'
+    - 'X-Request-Id'
+  accessControlAllowMethods:
+    - GET
+    - OPTIONS
+    - POST
+  accessControlAllowOriginList:
+    - 'example.com'
+    - 'test.cn'
+  accessControlMaxAge: "200"
+
 service:
   name: http
   type: ClusterIP
