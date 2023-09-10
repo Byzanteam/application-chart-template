@@ -7,7 +7,7 @@ description: A Helm chart template for byzanteam application
 # chart 类型
 type: application
 # chart 版本
-version: 1.0.10
+version: 1.1.0
 # 项目源码的URL列表
 sources:
   - https://github.com/Byzanteam/application-chart-template/

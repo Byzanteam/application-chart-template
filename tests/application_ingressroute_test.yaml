@@ -20,7 +20,20 @@ tests:
           value: (Host(`192.168.0.1`) || Host(`172.16.0.1`)) && PathPrefix(`/imag`)
         documentIndex: 2
 
-  - it: should render middleware
+  - it: should render middleware by default
+    set:
+      appIngressroute:
+        - name: app
+          path: /app
+    asserts:
+      - equal:
+          path: spec.routes[0].middlewares[0].name
+          value: RELEASE-NAME-application-chart-template-compress
+      - equal:
+          path: spec.routes[0].middlewares[1].name
+          value: RELEASE-NAME-application-chart-template-strip-prefix
+
+  - it: should render middleware append cors
     values:
       - ./values/test.yaml
     asserts:
@@ -30,6 +43,14 @@ tests:
       - equal:
           path: spec.routes[0].middlewares[1].name
           value: RELEASE-NAME-application-chart-template-strip-prefix
+      - equal:
+          path: spec.routes[0].middlewares[2].name
+          value: RELEASE-NAME-application-chart-template-cors
+        documentIndex: 1
+      - equal:
+          path: spec.routes[0].middlewares[3].name
+          value: RELEASE-NAME-application-chart-template-cors
+        documentIndex: 0
 
   - it: should render middleware if set applicationTLS
     values:

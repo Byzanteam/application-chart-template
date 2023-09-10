@@ -46,7 +46,7 @@ externalIngressroute: []
 #     path: "/second"
 #     middlewares:
 #       - strip-prefix
-#       - cros-header
+#       - cors-header
 #       - redirect-to-https
 #       - cors-header
 
@@ -74,6 +74,18 @@ applicationTLS: {}
 appIngressroute: []
   # - name: web
   #   path: /
+
+# 跨域相关设置
+corsSettings: {}
+  # accessControlAllowHeaders:
+  #   - '*'
+  # accessControlAllowMethods:
+  #   - GET
+  #   - OPTIONS
+  #   - PUT
+  # accessControlAllowOriginList:
+  #   - '*'
+  # accessControlMaxAge: "100"
 
 # 需要使用 initcontainers 请配置此项
 initContainers: []
