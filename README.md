@@ -84,6 +84,8 @@ externalIngressroute:
     middlewares:
       - cors-header
 ```
+> 注： 外部服务所用中间件 `cors-header` 目的是给前端调用第三方服务时使用
+
 ### 6. 设置应用需要的 env 参数
 ```yaml
 env: {}
