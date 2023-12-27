@@ -28,6 +28,11 @@ imageCredentials: {}
 # 自动重启策略
 restartPolicy: Always
 
+# Pod 调度设置
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
 ######################## External Service Setting ########################
 
 # traefik 代理外部服务的匹配规则
