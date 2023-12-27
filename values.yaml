@@ -63,6 +63,11 @@ service:
   type: ClusterIP
   port: 80
 
+# 覆盖 image command
+command: []
+  # - /bin/sh
+  # - -c
+
 # Application 访问域名设置
 applicationHosts: []
   # - localhost

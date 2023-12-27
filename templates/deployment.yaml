@@ -30,6 +30,10 @@ spec:
                 name: {{ include "application-chart-template.fullname" . }}-env
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- if .Values.command }}
+          command:
+            {{ .Values.command | toYaml | nindent 12 }}
+          {{- end }}
           ports:
             - name: {{ .Values.service.name }}
               containerPort: {{ .Values.service.port }}
