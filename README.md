@@ -39,6 +39,11 @@ A Helm chart template for byzanteam application
 | service.type | string | `"ClusterIP"` |  |
 | volumeMounts | list | `[]` |  |
 | volumes | list | `[]` |  |
+| nodeSelector | object | `{}` |  |
+| tolerations | list | `[]` |  |
+| affinity | object | `{}` |  |
+| command | list | `[]` |  |
+
 
 ----------------------------------------------
 
@@ -116,6 +121,14 @@ initContainers:
        - configMapRef:
            name: {{ include "application-chart-template.name" $ }}-env
 ```
+
+### image command 覆盖
+```yaml
+command:
+  - /bin/sh
+  - -c
+```
+
 ### 应用文件挂载设置
 ```yaml
 volumeMounts:
@@ -144,3 +157,55 @@ corsSettings:
   accessControlMaxAge: "100"
 ```
 
+### 调度设置
+
+- nodeSelector
+```yaml
+nodeSelector:
+  key: value
+```
+
+- tolerations
+```yaml
+tolerations:
+  - key: "key1"
+    operator: "Equal"
+    value: "value1"
+    effect: "NoSchedule"
+  - key: "key1"
+    operator: "Equal"
+    value: "value1"
+    effect: "NoExecute"
+```
+> [参数说明](https://kubernetes.io/zh-cn/docs/concepts/scheduling-eviction/taint-and-toleration/#concepts)
+
+- affinity
+
+```yaml
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/os
+          operator: In
+          values:
+          - linux
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      preference:
+        matchExpressions:
+        - key: label-1
+          operator: In
+          values:
+          - key-1
+    - weight: 50
+      preference:
+        matchExpressions:
+        - key: label-2
+          operator: In
+          values:
+          - key-2
+```
+
+> [参数说明](https://kubernetes.io/zh-cn/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)

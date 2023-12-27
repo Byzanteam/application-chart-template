@@ -28,6 +28,11 @@ imageCredentials: {}
 # 自动重启策略
 restartPolicy: Always
 
+# Pod 调度设置
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
 ######################## External Service Setting ########################
 
 # traefik 代理外部服务的匹配规则
@@ -57,6 +62,11 @@ service:
   name: http
   type: ClusterIP
   port: 80
+
+# 覆盖 image command
+command: []
+  # - /bin/sh
+  # - -c
 
 # Application 访问域名设置
 applicationHosts: []
