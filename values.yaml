@@ -118,5 +118,10 @@ volumes: []
   #     path: /local/path
   #     type: DirectoryOrCreate
 
+# 使用已存在的 secret 作为环境变量
+existEnvSecret:
+  sourceName:
+  secretKyes: []
+
 # application environment variablea, 根据实际设置
 env: {}

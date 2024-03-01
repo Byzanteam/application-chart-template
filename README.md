@@ -22,6 +22,8 @@ A Helm chart template for byzanteam application
 | applicationHosts | list | `[]` |  |
 | applicationTLS | object | `{}` |  |
 | corsSettings | object | `{}` |  |
+| existEnvSecret.sourceName | string | `""` | The secret resource name |
+| existEnvSecret.secretKyes | object | `[]` | The secret key name in the resource |
 | env | object | `{}` |  |
 | externalIngressroute | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
@@ -108,6 +110,31 @@ applicationTLS:
     certificate: certificate-file base64 encoding
     key: key-file base64 encoding
 ```
+
+### 8. 设置已存在的 secret 资源作为环境变量
+```yaml
+existEnvSecret:
+  sourceName: example-env-secret
+  secretKyes:
+    - example-key1
+    - example-key2
+```
+> 注：`secretKyes` 为环境变量名小写英文字母，单词之间使用 `-` 连接
+>
+> secret内容如下：
+>
+> ```yaml
+> apiVersion: v1
+> kind: Secret
+> metadata:
+>   name: example-env-secret
+> type: Opaque
+> data:
+>   example-key1: TnV6YUNYQTlZUUxMOWI= # base64 encoding string
+>   example-key2: aYnlwd1VpcFNlb1FIMVR # base64 encoding string
+> ```
+>
+> 
 
 ## Misc
 ### 应用启动初始化设置
