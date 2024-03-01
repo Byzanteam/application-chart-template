@@ -77,12 +77,14 @@ Host for access rule
 Build secret keys
 */}
 {{- define "application-chart-template.applicationSecretKeys" -}}
-{{- range $key := .Values.existEnvSecret.secretKyes }}
+{{- range $secret := .Values.existEnvSecret }}
+{{- range $key := $secret.secretKyes }}
 - name: {{ $key | quote | replace "-" "_" | upper }}
   valueFrom:
     secretKeyRef:
-      name: {{ $.Values.existEnvSecret.sourceName }}
+      name: {{ $secret.sourceName }}
       key: {{ $key | quote }}
+{{- end -}}
 {{- end -}}
 {{- end }}
 
