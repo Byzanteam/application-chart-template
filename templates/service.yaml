@@ -4,7 +4,7 @@ metadata:
   name: {{ include "application-chart-template.fullname" . }}
   labels:
     {{- include "application-chart-template.labels" . | nindent 4 }}
-  namespace: {{ .Values.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   type: {{ .Values.service.type }}
   ports:
