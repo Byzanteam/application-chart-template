@@ -34,7 +34,6 @@ A Helm chart template for byzanteam application
 | imageCredentials | object | `{}` |  |
 | initContainers | list | `[]` |  |
 | nameOverride | string | `""` |  |
-| namespace | string | `"default"` |  |
 | replicaCount | int | `1` |  |
 | restartPolicy | string | `"Always"` |  |
 | service.name | string | `"http"` |  |

@@ -36,7 +36,7 @@ Selector labels
 {{- define "application-chart-template.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "application-chart-template.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/namespace: {{ .Values.namespace }}
+app.kubernetes.io/namespace: {{ .Release.Namespace }}
 {{- end }}
 
 {{/*

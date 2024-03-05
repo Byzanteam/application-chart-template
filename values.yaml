@@ -8,9 +8,6 @@
 nameOverride: ""
 fullnameOverride: ""
 
-# 设置 chart 的 namespace
-namespace: default
-
 # 设置此 Pod 的副本数
 replicaCount: 1
 
