@@ -25,7 +25,7 @@ spec:
       {{- end }}
       containers:
         - name: {{ include "application-chart-template.name" . }}
-          {{- if .Values.existEnvSecret }}
+          {{- if .Values.envFromSecrets }}
           env:
             {{- include "application-chart-template.applicationSecretKeys" . | nindent 12 }}
           {{- end }}

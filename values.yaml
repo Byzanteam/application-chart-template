@@ -119,9 +119,11 @@ volumes: []
   #     type: DirectoryOrCreate
 
 # 使用已存在的 secret 作为环境变量
-existEnvSecret: []
-  # - sourceName: ""
-  #   secretKyes: []
+envFromSecrets: []
+  # - existSecretName: "jet-env-secret"
+  #   env:
+  #     - envName: "LOG_LEVEL"
+  #       secretKey: "jet_plugin_level"
 
 # application environment variablea, 根据实际设置
 env: {}
