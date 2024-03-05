@@ -22,6 +22,9 @@ A Helm chart template for byzanteam application
 | applicationHosts | list | `[]` |  |
 | applicationTLS | object | `{}` |  |
 | corsSettings | object | `{}` |  |
+| envFromSecrets[].existSecretName | string | `""` | The secret resource name |
+| envFromSecrets[].env[].envName | string | `""` | The env name |
+| envFromSecrets[].env[].secretKey | string | `""` | The secret key name in the resource |
 | env | object | `{}` |  |
 | externalIngressroute | list | `[]` |  |
 | fullnameOverride | string | `""` |  |
@@ -108,6 +111,27 @@ applicationTLS:
     certificate: certificate-file base64 encoding
     key: key-file base64 encoding
 ```
+
+### 8. 设置已存在的 secret 资源作为环境变量
+```yaml
+envFromSecrets:
+  - existSecretName: "jet-env-secret"
+    env:
+      - envName: "LOG_LEVEL"
+        secretKey: "jet_plugin_level"
+```
+> secret内容如下：
+>
+> ```yaml
+>apiVersion: v1
+> kind: Secret
+> metadata:
+>   name: example-env-secret
+> type: Opaque
+>   data:
+>   example-key1: TnV6YUNYQTlZUUxMOWI= # base64 encoding string
+>   example-key2: aYnlwd1VpcFNlb1FIMVR # base64 encoding string
+>   ```
 
 ## Misc
 ### 应用启动初始化设置

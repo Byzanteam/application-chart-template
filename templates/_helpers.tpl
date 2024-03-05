@@ -72,3 +72,19 @@ Host for access rule
 {{- end }}
 {{- printf "(%s)" (join $orOperator $ruleHosts) }}
 {{- end }}
+
+{/*
+Build secret keys
+*/}
+{{- define "application-chart-template.applicationSecretKeys" -}}
+{{- range $secret := .Values.envFromSecrets }}
+{{- range $env := $secret.env }}
+- name: {{ $env.envName }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ $secret.existSecretName }}
+      key: {{ $env.secretKey | quote }}
+{{- end -}}
+{{- end -}}
+{{- end }}
+
