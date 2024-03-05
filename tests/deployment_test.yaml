@@ -7,7 +7,7 @@ tests:
       - isKind:
           of: Deployment
 
-  - it: should set name and namespace label to nameOverride and namespace if no override is set
+  - it: should set name label to nameOverride if no override is set
     asserts:
       - isSubset:
           path: spec.selector
@@ -15,12 +15,11 @@ tests:
             matchLabels:
               app.kubernetes.io/name: application-chart-template
               app.kubernetes.io/instance: RELEASE-NAME
-              app.kubernetes.io/namespace: default
+              app.kubernetes.io/namespace: NAMESPACE
 
-  - it: should set name and namespace label to nameOverride and namespace if set
+  - it: should set name label to nameOverride if set
     set:
       nameOverride: unittest
-      namespace: unittest
     asserts:
       - isSubset:
           path: spec.selector
@@ -28,7 +27,7 @@ tests:
             matchLabels:
               app.kubernetes.io/name: unittest
               app.kubernetes.io/instance: RELEASE-NAME
-              app.kubernetes.io/namespace: unittest
+              app.kubernetes.io/namespace: NAMESPACE
 
   - it: should change image when image value is specified
     values:
