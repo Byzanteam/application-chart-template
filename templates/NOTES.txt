@@ -1,0 +1,12 @@
+{{ include "application-chart-template.fullname" . }} has been Installed!
+{{- if .Values.appIngressroute }}
+Use the link below to access the app:
+  {{- range $host := .Values.applicationHosts }}
+  {{- range $ingress := $.Values.appIngressroute }}
+  {{ empty $.Values.applicationTLS | ternary "http" "https" }}://{{ $host }}{{ $ingress.path }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+{{- if .Values.service }}
+Warnig: Migrate the `.values.service` (object) variable to `.values.services` (list)
+{{- end }}

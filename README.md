@@ -36,9 +36,10 @@ A Helm chart template for byzanteam application
 | nameOverride | string | `""` |  |
 | replicaCount | int | `1` |  |
 | restartPolicy | string | `"Always"` |  |
-| service.name | string | `"http"` |  |
-| service.port | int | `80` |  |
-| service.type | string | `"ClusterIP"` |  |
+| service[].name | string | `"http"` |  |
+| service[].port | int | `80` |  |
+| service[].protocol | string | `TCP` |  |
+| serviceType | string | `"ClusterIP"` |  |
 | volumeMounts | list | `[]` |  |
 | volumes | list | `[]` |  |
 | nodeSelector | object | `{}` |  |
@@ -76,8 +77,12 @@ applicationHosts:
 appIngressroute:
   - name: example-name
     path: /example-path
+    servicePortIndex: 0
 ```
+> 注： `servicePortIndex` 此值为 `.Values.services` 中子路径对应服务端口的索引值。值以 0 开始。
+
 ### 5. 设置外部服务代理规则
+
 ```yaml
 externalIngressroute:
   - name: "external-name"
