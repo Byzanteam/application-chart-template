@@ -6,11 +6,22 @@ metadata:
     {{- include "application-chart-template.labels" . | nindent 4 }}
   namespace: {{ .Release.Namespace }}
 spec:
+  {{- if .Values.service }}
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.name }}
       protocol: TCP
       name: {{ .Values.service.name }}
+  {{- else }}
+  type: {{ .Values.serviceType }}
+  ports:
+  {{- range $service := .Values.services }}
+    - port: {{ $service.port }}
+      targetPort: {{ $service.name }}
+      protocol: {{ $service.protocol }}
+      name: {{ $service.name }}
+  {{- end }}
+  {{- end }}
   selector:
     {{- include "application-chart-template.selectorLabels" . | nindent 4 }}

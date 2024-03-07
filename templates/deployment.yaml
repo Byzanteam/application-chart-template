@@ -39,9 +39,17 @@ spec:
             {{ .Values.command | toYaml | nindent 12 }}
           {{- end }}
           ports:
+            {{- if .Values.service }}
             - name: {{ .Values.service.name }}
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+            {{- else }}
+            {{- range $service := .Values.services }}
+            - name: {{ $service.name }}
+              containerPort: {{ $service.port }}
+              protocol: {{ $service.protocol }}
+            {{- end }}
+            {{- end }}
           volumeMounts:
             {{- .Values.volumeMounts | toYaml | nindent 12 }}
       restartPolicy: {{ .Values.restartPolicy }}

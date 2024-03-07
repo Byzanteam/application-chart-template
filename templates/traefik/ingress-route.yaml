@@ -1,14 +1,5 @@
 {{- range .Values.appIngressroute }}
 ---
-{{/* Middlewares for web ingress-routes */}}
-{{- $webMiddlewares := list "compress" "strip-prefix" }}
-{{- if $.Values.applicationTLS | empty | not }}
-{{- $webMiddlewares = append $webMiddlewares "redirect-to-https" }}
-{{- end }}
-{{- if $.Values.corsSettings | empty | not }}
-{{- $webMiddlewares = append $webMiddlewares "cors" }}
-{{- end }}
-
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -18,23 +9,26 @@ spec:
   entryPoints:
     - web
   routes:
+    {{- if $.Values.service }}
     - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
           port: {{ $.Values.service.port }}
       middlewares:
-        {{- range $webMiddlewares }}
-        - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
-        {{- end }}
----
-{{- if $.Values.applicationTLS | empty | not }}
+        {{- include "application-chart-template.webMiddlewares" $ | nindent 8}}
+    {{- else }}
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ get (index $.Values.services (int .servicePortIndex)) "port" }}
+      middlewares:
+        {{- include "application-chart-template.webMiddlewares" $ | nindent 8}}
+    {{- end }}
 
-{{/* Middlewares for websecure ingress-routes */}}
-{{- $websecureMiddlewares := list "compress" "strip-prefix" }}
-{{- if $.Values.corsSettings | empty | not }}
-{{- $websecureMiddlewares = append $websecureMiddlewares "cors" }}
-{{- end }}
+---
+{{- if $.Values.applicationTLS }}
 
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -45,19 +39,27 @@ spec:
   entryPoints:
     - websecure
   routes:
+    {{- if $.Values.service }}
     - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
           port: {{ $.Values.service.port }}
       middlewares:
-        {{- range $websecureMiddlewares }}
-        - name: {{ include "application-chart-template.fullname" $ }}-{{ . }}
-        {{- end }}
+        {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
+    {{- else }}
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ get (index $.Values.services (int .servicePortIndex)) "port" }}
+      middlewares:
+        {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
+    {{- end }}
   tls:
-    {{- if $.Values.applicationTLS.certResolver | empty | not }}
+    {{- if $.Values.applicationTLS.certResolver }}
     certResolver: {{ $.Values.applicationTLS.certResolver }}
-    {{- else if $.Values.applicationTLS.TLSSecret | empty | not }}
+    {{- else if $.Values.applicationTLS.TLSSecret }}
     secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
     {{- end }}
 {{- end }}

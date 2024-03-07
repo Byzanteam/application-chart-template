@@ -55,10 +55,12 @@ externalIngressroute: []
 ######################## Application Service Setting ########################
 
 # 应用服务配置
-service:
-  name: http
-  type: ClusterIP
-  port: 80
+services:
+  - name: http
+    port: 80
+    protocol: TCP
+
+serviceType: ClusterIP
 
 # 覆盖 image command
 command: []
@@ -81,6 +83,7 @@ applicationTLS: {}
 appIngressroute: []
   # - name: web
   #   path: /
+  #   servicePortIndex: 0
 
 # 跨域相关设置
 corsSettings: {}

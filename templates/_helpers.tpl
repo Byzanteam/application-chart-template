@@ -60,19 +60,6 @@ Return the imagePullSecret
 {{- end }}
 {{- end }}
 
-{{/*
-Host for access rule
-*/}}
-{{- define "application-chart-template.applicationHosts" -}}
-{{- $hosts := .Values.applicationHosts }}
-{{- $orOperator := " || " }}
-{{- $ruleHosts := list }}
-{{- range $_, $host := $hosts }}
-  {{- $ruleHosts = append $ruleHosts (printf "Host(`%s`)" $host) }}
-{{- end }}
-{{- printf "(%s)" (join $orOperator $ruleHosts) }}
-{{- end }}
-
 {/*
 Build secret keys
 */}
