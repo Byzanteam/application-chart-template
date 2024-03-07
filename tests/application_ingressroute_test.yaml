@@ -20,11 +20,56 @@ tests:
           value: (Host(`192.168.0.1`) || Host(`172.16.0.1`)) && PathPrefix(`/imag`)
         documentIndex: 2
 
+  - it: should render multiple services port
+    set:
+      appIngressroute:
+        - name: app
+          path: /app
+          servicePortIndex: 0
+        - name: api
+          path: /api
+          servicePortIndex: 0
+        - name: example
+          path: /example
+          servicePortIndex: 1
+      services:
+        - port: 80
+          name: product
+        - port: 8080
+          name: example
+    asserts:
+      - hasDocuments:
+          count: 3
+      - isSubset:
+          path: spec.routes[0]
+          content:
+            services:
+              - name: RELEASE-NAME-application-chart-template
+                port: 80
+        documentIndex: 0
+      - isSubset:
+          path: spec.routes[0]
+          content:
+            services:
+              - name: RELEASE-NAME-application-chart-template
+                port: 80
+        documentIndex: 1
+      - isSubset:
+          path: spec.routes[0]
+          content:
+            services:
+              - name: RELEASE-NAME-application-chart-template
+                port: 8080
+        documentIndex: 2
+
   - it: should render middleware by default
     set:
       appIngressroute:
         - name: app
           path: /app
+          port: 0
+      services:
+        - port: 80
     asserts:
       - equal:
           path: spec.routes[0].middlewares[0].name
