@@ -1,16 +1,16 @@
-{{- range $ingressroute := .Values.appIngressroute }}
+{{- range .Values.appIngressroute }}
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.fullname" $ }}-{{ $ingressroute.name }}-web
+  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}-web
   namespace: {{ $.Values.namespace }}
 spec:
   entryPoints:
     - web
   routes:
     {{- if $.Values.service.port }}
-    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ $ingressroute.path }}`)
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
@@ -18,11 +18,11 @@ spec:
       middlewares:
         {{- include "application-chart-template.webMiddlewares" $ | nindent 8}}
     {{- else }}
-    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ $ingressroute.path }}`)
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
-          port: {{ include "application-chart-template.ingressServicePort" (dict "ports" $.Values.service.ports "servicePortName" $ingressroute.servicePortName) }}
+          port: {{ include "application-chart-template.ingressServicePort" (dict "ports" $.Values.service.ports "servicePortName" .servicePortName) }}
       middlewares:
         {{- include "application-chart-template.webMiddlewares" $ | nindent 8}}
     {{- end }}
@@ -33,14 +33,14 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "application-chart-template.fullname" $ }}-{{ $ingressroute.name }}-websecure
+  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}-websecure
   namespace: {{ $.Values.namespace }}
 spec:
   entryPoints:
     - websecure
   routes:
     {{- if $.Values.service.port }}
-    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ $ingressroute.path }}`)
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
@@ -48,11 +48,11 @@ spec:
       middlewares:
         {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
     {{- else }}
-    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ $ingressroute.path }}`)
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
-          port: {{ include "application-chart-template.ingressRouteServicePort" (dict "ingress" $ingressroute) }}
+          port: {{ include "application-chart-template.ingressServicePort" (dict "ports" $.Values.service.ports "servicePortName" .servicePortName) }}
       middlewares:
         {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
     {{- end }}
@@ -119,7 +119,7 @@ spec:
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
-          port: {{ include "application-chart-template.ingressRouteServicePort" (dict "ingress" .) }}
+          port: {{ include "application-chart-template.ingressServicePort" (dict "ports" $.Values.service.ports "servicePortName" .servicePortName) }}
       middlewares:
         {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
     {{- end }}
