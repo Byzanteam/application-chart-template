@@ -64,3 +64,70 @@ spec:
     {{- end }}
 {{- end }}
 {{- end }}
+
+{{- range .Values.appIngressroutes }}
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}-web
+  namespace: {{ $.Values.namespace }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    {{- if $.Values.service.port }}
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ $.Values.service.port }}
+      middlewares:
+        {{- include "application-chart-template.webMiddlewares" $ | nindent 8}}
+    {{- else }}
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ include "application-chart-template.ingressServicePort" (dict "ports" $.Values.service.ports "servicePortName" .servicePortName) }}
+      middlewares:
+        {{- include "application-chart-template.webMiddlewares" $ | nindent 8}}
+    {{- end }}
+
+---
+{{- if $.Values.applicationTLS }}
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "application-chart-template.fullname" $ }}-{{ .name }}-websecure
+  namespace: {{ $.Values.namespace }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    {{- if $.Values.service.port }}
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ $.Values.service.port }}
+      middlewares:
+        {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
+    {{- else }}
+    - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
+      kind: Rule
+      services:
+        - name: {{ include "application-chart-template.fullname" $ }}
+          port: {{ include "application-chart-template.ingressRouteServicePort" (dict "ingress" .) }}
+      middlewares:
+        {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
+    {{- end }}
+  tls:
+    {{- if $.Values.applicationTLS.certResolver }}
+    certResolver: {{ $.Values.applicationTLS.certResolver }}
+    {{- else if $.Values.applicationTLS.TLSSecret }}
+    secretName: {{ include "application-chart-template.fullname" $ }}-tls-secret
+    {{- end }}
+{{- end }}
+{{- end }}

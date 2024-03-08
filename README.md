@@ -18,7 +18,7 @@ A Helm chart template for byzanteam application
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| appIngressroute | list | `[]` |  |
+| appIngressroutes | list | `[]` |  |
 | applicationHosts | list | `[]` |  |
 | applicationTLS | object | `{}` |  |
 | corsSettings | object | `{}` |  |
@@ -74,7 +74,7 @@ applicationHosts:
 ```
 ### 4. 设置反向代理对应 path 规则
 ```yaml
-appIngressroute:
+appIngressroutes:
   - name: example-name
     path: /example-path
     servicePortIndex: 0

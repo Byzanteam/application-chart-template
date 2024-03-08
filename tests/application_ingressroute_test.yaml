@@ -22,7 +22,7 @@ tests:
 
   - it: should render multiple services port
     set:
-      appIngressroute:
+      appIngressroutes:
         - name: app
           path: /app
           servicePortName: product
@@ -46,30 +46,30 @@ tests:
           content:
             services:
               - name: RELEASE-NAME-application-chart-template
-                port: 80
+                port: product
         documentIndex: 0
       - isSubset:
           path: spec.routes[0]
           content:
             services:
               - name: RELEASE-NAME-application-chart-template
-                port: 80
+                port: product
         documentIndex: 1
       - isSubset:
           path: spec.routes[0]
           content:
             services:
               - name: RELEASE-NAME-application-chart-template
-                port: 8080
+                port: example
         documentIndex: 2
 
   - it: should render middleware by default
     set:
-      appIngressroute:
+      appIngressroutes:
         - name: app
           path: /app
           servicePortName: app
-      services:
+      service:
         ports:
           - port: 80
             name: app

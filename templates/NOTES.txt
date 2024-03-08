@@ -6,7 +6,16 @@ Use the link below to access the app:
   {{ empty $.Values.applicationTLS | ternary "http" "https" }}://{{ $host }}{{ $ingress.path }}
   {{- end }}
   {{- end }}
+Warnig: Migrate the `.Values.appIngressroute` variable to `.Values.appIngressroutes`
 {{- end }}
-{{- if .Values.service }}
-Warnig: Migrate the `.values.service` (object) variable to `.values.services` (list)
+{{- if .Values.appIngressroutes }}
+Use the link below to access the app:
+  {{- range $host := .Values.applicationHosts }}
+  {{- range $ingress := $.Values.appIngressroute }}
+  {{ empty $.Values.applicationTLS | ternary "http" "https" }}://{{ $host }}{{ $ingress.path }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+{{- if .Values.service.port }}
+Warnig: Migrate the `.Values.service.port` (object) variable to `.Values.service.ports` (list)
 {{- end }}

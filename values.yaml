@@ -80,7 +80,7 @@ applicationTLS: {}
     # key: base64 encoding key-file
 
 # traefik 代理应用的匹配规则
-appIngressroute: []
+appIngressroutes: []
   # - name: web
   #   path: /
   #   servicePortName: http
