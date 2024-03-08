@@ -46,9 +46,9 @@ Renders the ingress service port value
 {{- define "application-chart-template.ingressServicePort" -}}
 {{- $portName := "" -}}
 {{- range $port := .ports -}}
-  {{- if eq .servicePortName $port.name -}}
-	{{- $portName = .servicePortName -}}
-	{{- end -}}
+  {{- if eq $.servicePortName $port.name -}}
+  {{- $portName = $.servicePortName -}}
+  {{- end -}}
 {{- end -}}
 {{- if $portName -}}
 {{- printf "%s" $portName -}}
