@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - web
   routes:
-    {{- if $.Values.service }}
+    {{- if $.Values.service.port }}
     - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
@@ -22,7 +22,7 @@ spec:
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
-          port: {{ get (index $.Values.services.ports (int .servicePortIndex)) "port" }}
+          port: {{ include "application-chart-template.ingressServicePort" (dict "ports" $.Values.service.ports "servicePortName" .servicePortName) }}
       middlewares:
         {{- include "application-chart-template.webMiddlewares" $ | nindent 8}}
     {{- end }}
@@ -39,7 +39,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    {{- if $.Values.service }}
+    {{- if $.Values.service.port }}
     - match: {{ include "application-chart-template.applicationHosts" $ }} && PathPrefix(`{{ .path }}`)
       kind: Rule
       services:
@@ -52,7 +52,7 @@ spec:
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
-          port: {{ get (index $.Values.services.ports (int .servicePortIndex)) "port" }}
+          port: {{ include "application-chart-template.ingressRouteServicePort" (dict "ingress" .) }}
       middlewares:
         {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
     {{- end }}

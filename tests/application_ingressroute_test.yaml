@@ -25,14 +25,14 @@ tests:
       appIngressroute:
         - name: app
           path: /app
-          servicePortIndex: 0
+          servicePortName: product
         - name: api
           path: /api
-          servicePortIndex: 0
+          servicePortName: product
         - name: example
           path: /example
-          servicePortIndex: 1
-      services:
+          servicePortName: example
+      service:
         ports:
           - port: 80
             name: product
@@ -68,10 +68,11 @@ tests:
       appIngressroute:
         - name: app
           path: /app
-          port: 0
+          servicePortName: app
       services:
         ports:
           - port: 80
+            name: app
     asserts:
       - equal:
           path: spec.routes[0].middlewares[0].name

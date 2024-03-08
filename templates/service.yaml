@@ -6,7 +6,7 @@ metadata:
     {{- include "application-chart-template.labels" . | nindent 4 }}
   namespace: {{ .Release.Namespace }}
 spec:
-  {{- if .Values.service }}
+  {{- if .Values.service.port }}
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
@@ -14,9 +14,9 @@ spec:
       protocol: TCP
       name: {{ .Values.service.name }}
   {{- else }}
-  type: {{ .Values.services.type }}
+  type: {{ .Values.service.type }}
   ports:
-  {{- range .Values.services.ports }}
+  {{- range .Values.service.ports }}
     - port: {{ .port }}
       targetPort: {{ .name }}
       protocol: {{ .protocol }}

@@ -40,3 +40,19 @@ Middlewares for websecure ingress-routes
 {{- end }}
 {{- end }}
 
+{{/*
+Renders the ingress service port value
+*/}}
+{{- define "application-chart-template.ingressServicePort" -}}
+{{- $portName := "" -}}
+{{- range $port := .ports -}}
+  {{- if eq .servicePortName $port.name -}}
+	{{- $portName = .servicePortName -}}
+	{{- end -}}
+{{- end -}}
+{{- if $portName -}}
+{{- printf "%s" $portName -}}
+{{- else -}}
+{{- fail "The same service port name could not be found!" -}}
+{{- end -}}
+{{- end -}}

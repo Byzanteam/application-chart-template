@@ -55,7 +55,7 @@ externalIngressroute: []
 ######################## Application Service Setting ########################
 
 # 应用服务配置
-services:
+service:
   type: ClusterIP
   ports:
     - name: http
@@ -83,7 +83,7 @@ applicationTLS: {}
 appIngressroute: []
   # - name: web
   #   path: /
-  #   servicePortIndex: 0
+  #   servicePortName: http
 
 # 跨域相关设置
 corsSettings: {}

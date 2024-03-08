@@ -39,12 +39,12 @@ spec:
             {{ .Values.command | toYaml | nindent 12 }}
           {{- end }}
           ports:
-            {{- if .Values.service }}
+            {{- if .Values.service.port }}
             - name: {{ .Values.service.name }}
               containerPort: {{ .Values.service.port }}
               protocol: TCP
             {{- else }}
-            {{- range .Values.services.ports }}
+            {{- range .Values.service.ports }}
             - name: {{ .name }}
               containerPort: {{ .port }}
               protocol: {{ .protocol }}
