@@ -33,10 +33,11 @@ tests:
           path: /example
           servicePortIndex: 1
       services:
-        - port: 80
-          name: product
-        - port: 8080
-          name: example
+        ports:
+          - port: 80
+            name: product
+          - port: 8080
+            name: example
     asserts:
       - hasDocuments:
           count: 3
@@ -69,7 +70,8 @@ tests:
           path: /app
           port: 0
       services:
-        - port: 80
+        ports:
+          - port: 80
     asserts:
       - equal:
           path: spec.routes[0].middlewares[0].name

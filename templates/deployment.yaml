@@ -44,10 +44,10 @@ spec:
               containerPort: {{ .Values.service.port }}
               protocol: TCP
             {{- else }}
-            {{- range $service := .Values.services }}
-            - name: {{ $service.name }}
-              containerPort: {{ $service.port }}
-              protocol: {{ $service.protocol }}
+            {{- range .Values.services.ports }}
+            - name: {{ .name }}
+              containerPort: {{ .port }}
+              protocol: {{ .protocol }}
             {{- end }}
             {{- end }}
           volumeMounts:

@@ -14,13 +14,13 @@ spec:
       protocol: TCP
       name: {{ .Values.service.name }}
   {{- else }}
-  type: {{ .Values.serviceType }}
+  type: {{ .Values.services.type }}
   ports:
-  {{- range $service := .Values.services }}
-    - port: {{ $service.port }}
-      targetPort: {{ $service.name }}
-      protocol: {{ $service.protocol }}
-      name: {{ $service.name }}
+  {{- range .Values.services.ports }}
+    - port: {{ .port }}
+      targetPort: {{ .name }}
+      protocol: {{ .protocol }}
+      name: {{ .name }}
   {{- end }}
   {{- end }}
   selector:

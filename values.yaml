@@ -56,11 +56,11 @@ externalIngressroute: []
 
 # 应用服务配置
 services:
-  - name: http
-    port: 80
-    protocol: TCP
-
-serviceType: ClusterIP
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
 
 # 覆盖 image command
 command: []

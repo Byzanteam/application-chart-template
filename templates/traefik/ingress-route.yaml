@@ -22,7 +22,7 @@ spec:
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
-          port: {{ get (index $.Values.services (int .servicePortIndex)) "port" }}
+          port: {{ get (index $.Values.services.ports (int .servicePortIndex)) "port" }}
       middlewares:
         {{- include "application-chart-template.webMiddlewares" $ | nindent 8}}
     {{- end }}
@@ -52,7 +52,7 @@ spec:
       kind: Rule
       services:
         - name: {{ include "application-chart-template.fullname" $ }}
-          port: {{ get (index $.Values.services (int .servicePortIndex)) "port" }}
+          port: {{ get (index $.Values.services.ports (int .servicePortIndex)) "port" }}
       middlewares:
         {{- include "application-chart-template.websecureMiddlewares" $ | nindent 8}}
     {{- end }}
