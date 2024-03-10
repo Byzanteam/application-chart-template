@@ -39,7 +39,8 @@ spec:
             {{ .Values.command | toYaml | nindent 12 }}
           {{- end }}
           ports:
-            # TODO: Delete this after the value is migrated to `service.ports`
+            # TODO: 1. Update multiple service ports. Input multiple service ports using list.
+            # 2. Delete this after the version 2.0.0
             {{- if .Values.service.port }}
             - name: {{ .Values.service.name }}
               containerPort: {{ .Values.service.port }}
