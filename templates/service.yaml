@@ -6,6 +6,7 @@ metadata:
     {{- include "application-chart-template.labels" . | nindent 4 }}
   namespace: {{ .Release.Namespace }}
 spec:
+  # TODO: Delete this after the value is migrated to `service.ports`
   {{- if .Values.service.port }}
   type: {{ .Values.service.type }}
   ports:
