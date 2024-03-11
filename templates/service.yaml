@@ -6,11 +6,24 @@ metadata:
     {{- include "application-chart-template.labels" . | nindent 4 }}
   namespace: {{ .Release.Namespace }}
 spec:
+  # TODO: 1. Update multiple service ports. Input multiple service ports using list.
+  # 2. Delete this after the version 2.0.0
+  {{- if .Values.service.port }}
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.name }}
       protocol: TCP
       name: {{ .Values.service.name }}
+  {{- else }}
+  type: {{ .Values.service.type }}
+  ports:
+  {{- range .Values.service.ports }}
+    - port: {{ .port }}
+      targetPort: {{ .name }}
+      protocol: {{ .protocol }}
+      name: {{ .name }}
+  {{- end }}
+  {{- end }}
   selector:
     {{- include "application-chart-template.selectorLabels" . | nindent 4 }}

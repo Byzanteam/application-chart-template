@@ -1,6 +1,6 @@
 # application-chart-template
 
-![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
+![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 A Helm chart template for byzanteam application
 
@@ -18,7 +18,7 @@ A Helm chart template for byzanteam application
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| appIngressroute | list | `[]` |  |
+| appIngressroutes | list | `[]` |  |
 | applicationHosts | list | `[]` |  |
 | applicationTLS | object | `{}` |  |
 | corsSettings | object | `{}` |  |
@@ -36,8 +36,9 @@ A Helm chart template for byzanteam application
 | nameOverride | string | `""` |  |
 | replicaCount | int | `1` |  |
 | restartPolicy | string | `"Always"` |  |
-| service.name | string | `"http"` |  |
-| service.port | int | `80` |  |
+| service.ports[].name | string | `"http"` |  |
+| service.ports[].port | int | `80` |  |
+| service.ports[].protocol | string | `TCP` |  |
 | service.type | string | `"ClusterIP"` |  |
 | volumeMounts | list | `[]` |  |
 | volumes | list | `[]` |  |
@@ -73,11 +74,13 @@ applicationHosts:
 ```
 ### 4. 设置反向代理对应 path 规则
 ```yaml
-appIngressroute:
+appIngressroutes:
   - name: example-name
     path: /example-path
+    servicePortName: 0
 ```
 ### 5. 设置外部服务代理规则
+
 ```yaml
 externalIngressroute:
   - name: "external-name"
