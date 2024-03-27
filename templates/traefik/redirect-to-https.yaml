@@ -12,7 +12,7 @@ spec:
     permanent: true
 {{- end }}
 
-{{- if .Values.appIngressroute }}
+{{- if .Values.appIngressroutes }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
