@@ -1,5 +1,7 @@
 # application-chart-template
 
+**Please note: This repository is currently unmaintained by a team of developers at Byzanteam. It is now maintained by the [charts/application-chart-template](https://github.com/Byzanteam/charts/tree/main/charts/application-chart-template).**
+
 ![Version: 1.4.0](https://img.shields.io/badge/Version-1.4.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.0.0](https://img.shields.io/badge/AppVersion-1.0.0-informational?style=flat-square)
 
 A Helm chart template for byzanteam application
